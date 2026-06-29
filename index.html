@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Kasir Modern - Warkop Majoe</title>
+    <style>
+        /* Modern CSS Reset & Variable - TEMA HIJAU & COKELAT (EARTH TONE) */
+        :root {
+            --primary: #2e7d32;
+            /* Hijau Daun Segar */
+            --primary-hover: #1b5e20;
+            /* Hijau Tua untuk Hover */
+            --bg-body: #f4f1ea;
+            /* Background Krem/Cokelat Sangat Muda */
+            --surface: #ffffff;
+            --text-main: #3e2723;
+            /* Teks Cokelat Gelap */
+            --text-muted: #6d4c41;
+            /* Teks Cokelat Medium */
+            --border-color: #c8e6c9;
+            /* Border Hijau Soft */
+            --accent-brown: #8d6e63;
+            /* Cokelat Aksen */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), #4e342e);
+            /* Gradasi Hijau ke Cokelat */
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(46, 125, 50, 0.15);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+            letter-spacing: 2px;
+            font-weight: 800;
+        }
+
+        /* NAVIGATION BAR */
+        nav {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+        }
+
+        nav button {
+            background-color: #ffffff;
+            color: var(--text-main);
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            border: 1px solid #d7ccc8;
+            /* Border Cokelat Muda */
+            cursor: pointer;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        nav button:hover,
+        nav button.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* STYLE KONTEN HALAMAN */
+        .page-content {
+            display: none;
+        }
+
+        .page-content.active-page {
+            display: block;
+        }
+
+        .section {
+            background: var(--surface);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(62, 39, 35, 0.05);
+            margin-bottom: 25px;
+        }
+
+        .section h2 {
+            margin-top: 0;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: var(--primary-hover);
+        }
+
+        /* ADVANCED POS LAYOUT */
+        .pos-container {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+
+        .catalog-container {
+            flex: 1.4;
+            min-width: 450px;
+        }
+
+        /* Search and Filter Bar */
+        .search-filter-wrapper {
+            background: #efebe9;
+            /* Background Cokelat Sangat Lembut */
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            border: 1px solid #d7ccc8;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: 1px solid #d7ccc8;
+            border-radius: 6px;
+            font-size: 15px;
+            box-sizing: border-box;
+            outline: none;
+            color: var(--text-main);
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15);
+        }
+
+        .search-box::after {
+            content: '🔍';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+        }
+
+        .btn-filter {
+            background: white;
+            border: 1px solid #d7ccc8;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            color: var(--text-main);
+            transition: all 0.2s ease;
+        }
+
+        .btn-filter.active,
+        .btn-filter:hover {
+            background: var(--accent-brown);
+            color: white;
+            border-color: var(--accent-brown);
+        }
+
+        /* Grid Cards Menu */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .menu-card {
+            background: white;
+            border: 1px solid #e0dcd3;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+        }
+
+        .menu-card.hidden {
+            display: none !important;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.1);
+            border-color: var(--primary);
+        }
+
+        .menu-card .menu-tag {
+            font-size: 10px;
+            text-transform: uppercase;
+            font-weight: bold;
+            color: var(--accent-brown);
+            margin-bottom: 5px;
+        }
+
+        .menu-card .menu-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin: 0 0 10px 0;
+            line-height: 1.3;
+        }
+
+        .menu-card .menu-price {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .btn-add-item {
+            background: #e8f5e9;
+            color: var(--primary-hover);
+            border: 1px solid var(--border-color);
+            width: 100%;
+            padding: 8px;
+            margin-top: 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-add-item:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Checkout Section (Right Side) */
+        .checkout-container {
+            flex: 1;
+            min-width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .cart-box {
+            background: #ffffff;
+            border: 1px solid #d7ccc8;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 12px rgba(62, 39, 35, 0.02);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        table th,
+        table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #efebe9;
+        }
+
+        table th {
+            background-color: #efebe9;
+            color: var(--text-muted);
+        }
+
+        .qty-controls {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .btn-qty {
+            background: #efebe9;
+            color: var(--text-main);
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-qty:hover {
+            background: var(--accent-brown);
+            color: white;
+        }
+
+        .form-customer {
+            margin-bottom: 15px;
+        }
+
+        .form-customer label {
+            display: block;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--text-muted);
+        }
+
+        .form-customer input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d7ccc8;
+            border-radius: 5px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .form-customer input:focus {
+            border-color: var(--primary);
+        }
+
+        /* STRUK KASIR DESAIN UNIK LUCI (TEMA KAFE SANTAI) */
+        .struk-box {
+            display: none;
+            background: #fffdf9;
+            /* Tetap krem hangat aesthetic agar menyerupai kertas nota fisik */
+            border: 2px solid #d7ccc8;
+            border-radius: 12px;
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .struk-box::before,
+        .struk-box::after {
+            content: "✨ * . * . * . * . * . * . * . * ✨";
+            display: block;
+            text-align: center;
+            color: var(--accent-brown);
+            font-size: 11px;
+            letter-spacing: 2px;
+            margin: 5px 0;
+        }
+
+        .struk-header {
+            text-align: center;
+            padding-bottom: 5px;
+        }
+
+        .struk-header h3 {
+            margin: 0 0 5px 0;
+            font-size: 18px;
+            color: var(--text-main);
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .struk-header p {
+            margin: 2px 0;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .struk-divider {
+            text-align: center;
+            margin: 10px 0;
+            color: var(--accent-brown);
+            font-size: 12px;
+        }
+
+        .struk-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            font-size: 12px;
+            color: var(--text-main);
+        }
+
+        .struk-row.bold {
+            font-weight: bold;
+            font-size: 14px;
+            border-top: 1px dashed var(--accent-brown);
+            padding-top: 8px;
+            margin-top: 8px;
+        }
+
+        .struk-footer {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-main);
+            margin-top: 15px;
+            line-height: 1.4;
+        }
+
+        .struk-footer p {
+            margin: 5px 0;
+        }
+
+        .badge-wifi {
+            display: inline-block;
+            background: #efebe9;
+            color: var(--text-muted);
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 10px;
+            margin-top: 8px;
+            border: 1px dashed var(--accent-brown);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d7ccc8;
+            border-radius: 5px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--primary);
+        }
+
+        .btn-action {
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            font-size: 15px;
+            transition: background 0.2s;
+        }
+
+        .btn-action:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* CSS KHUSUS PRINT OPTIMIZATION */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #struk-nota-fisik,
+            #struk-nota-fisik * {
+                visibility: visible;
+            }
+
+            @page {
+                size: auto;
+                margin: 0mm;
+            }
+
+            body {
+                background: #fff;
+                padding: 0;
+                margin: 0;
+            }
+
+            #struk-nota-fisik {
+                display: block !important;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                max-width: 280px;
+                padding: 15px;
+                border: none;
+                box-shadow: none;
+                background: transparent;
+            }
+
+            .struk-box::before,
+            .struk-box::after {
+                color: #000;
+            }
+
+            .struk-footer {
+                padding-bottom: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>WARKOP MAJOE</h1>
+    </header>
+
+    <nav>
+        <button id="nav-pos" class="active" onclick="bukaHalaman('page-pos', this)">🛒 Kasir (POS)</button>
+        <button id="nav-inventori" onclick="bukaHalaman('page-inventori', this)">📦 Inventori Stok</button>
+        <button id="nav-pembelian" onclick="bukaHalaman('page-pembelian', this)">🧾 Pembelian Bahan Baku</button>
+    </nav>
+
+    <!-- HALAMAN KASIR -->
+    <div id="page-pos" class="page-content active-page">
+        <div class="section">
+            <h2>🛒 Point of Sales (Penjualan)</h2>
+            <div class="pos-container">
+
+                <div class="catalog-container">
+                    <div class="search-filter-wrapper">
+                        <div class="search-box">
+                            <input type="text" id="search-input"
+                                placeholder="Ketik nama makanan, minuman, atau jasa...">
+                        </div>
+                        <div class="filter-buttons">
+                            <button class="btn-filter active" onclick="filterKategori('semua', this)">Semua
+                                Menu</button>
+                            <button class="btn-filter" onclick="filterKategori('makanan', this)">🍜 Makanan &
+                                Cemilan</button>
+                            <button class="btn-filter" onclick="filterKategori('kopi', this)">☕ Kopi & Susu</button>
+                            <button class="btn-filter" onclick="filterKategori('minuman', this)">🍹 Minuman</button>
+                            <button class="btn-filter" onclick="filterKategori('rental', this)">🎮 Rental PS</button>
+                            <button class="btn-filter" onclick="filterKategori('toping', this)">🧀 Toping</button>
+                        </div>
+                    </div>
+
+                    <div class="menu-grid">
+                        <!-- RENTAL ZONE -->
+                        <div class="menu-card" data-kategori="rental" style="border: 2px solid var(--primary);">
+                            <div>
+                                <div class="menu-tag">RENTAL ZONE</div>
+                                <h4 class="menu-title">Sewa PS (Per Jam)</h4>
+                            </div>
+                            <div>
+                                <div class="menu-price">Rp 10.000</div><button class="btn-add-item"
+                                    onclick="tambahKeKeranjang('Sewa PS (Per Jam)', 10000)">+ Tambah Jam</button>
+                            </div>
+                        </div>
+
+                        <!-- SPESIAL MENU -->
+                        <div class="menu-card" data-kategori="makanan">
+                            <div>
+                                <div class="menu-tag">Spesial Menu</div>
+                                <h4 class="menu-title">Cuanki</h4>
+                            </div>
+                            <div>
+                                <div class="menu-price">Rp 10.000</div><button class="btn-add-item"
+                                    onclick="tambahKeKeranjang('Cuanki', 10000)">+ Tambah</button>
+                            </div>
+                        </div>
+                        <div class="menu-card" data-kategori="makanan">
+                            <div>
+                                <div class="menu-tag">Spesial Menu</div>
+                                <h4 class="menu-title">Cilok Kuah</h4>
+                            </div>
+                            <div>
+                                <div class="menu-price">Rp 10.000</div><button class="btn-add-item"
+                                    onclick="tambahKeKeranjang('Cilok Kuah', 10000)">+ Tambah</button>
+                            </div>
+                        </div>
+
+                        <!-- INDOMIE GORENG -->
+                        <div class="menu-card" data-kategori="makanan">
+                            <div>
+                                <div class="menu-tag">Indomie Goreng</div>
+                                <h4 class="menu-title">Indomie Goreng Original</h4>
+                            </div>
+                            <div>
+                                <div class="menu-price">Rp 7.000</div><button class="btn-add-item"
+                                    onclick="tambahKeKeranjang('Indomie Goreng Original', 7000)">+ Tambah</button>
+                            </div>
+                        </div>
+                        <div class="menu-card" data-kategori="makanan">
+                            <div>
+                                <div class="menu-tag">Indomie Goreng</div>
+                                <h4 class="menu-title">Indomie Goreng Double</h4>
+                            </div>
+                            <div>
+                                <div class="menu-price">Rp 12.000</div><button class="btn-add-item"
+                                    onclick="tambahKeKeranjang('Indomie Goreng Double', 12000)">+ Tambah</button>
+                            </div>
+                        </div>
+
+                        <!-- INDOMIE KUAH -->
+                        <div class="menu-card" data-kategori="makanan">
+                            <div>
+                                <div class="menu-tag">Indomie Kuah</div>
+                                <h4 class="menu-title">Indomie Kuah Original</h4>
+                            </div>
+                            <div>
+                                <div class="menu-price">Rp 7.000</div><button class="btn-add-item"
+                                    onclick="tambahKeKeranjang('Indomie Kuah Original', 7000)">+ Tambah</button>
+                            </div>
+                        </div>
+                        <div class="menu-card" data-kategori="makanan">
+                            <div>
+                                <div class="menu-tag">Indomie Kuah</div>
+                                <h4 class="menu-title">Indomie Kuah Double</h4>
+                            </div>
+                            <div>
+                                <div class="menu-price">Rp 12.000</div><button class="btn-add-item"
+                                    onclick="tambahKeKeranjang('Indomie Kuah Double', 12000)">+ Tambah</button>
+                            </div>
+                        </div>
+
+                        <!-- ANEKA CEMILAN -->
+                        <div class="menu-card" data-kategori="makanan">
+                            <div>
+                                <div class="menu-tag">Aneka Cemilan</div>
+                                <h4 class="menu-title">Otak-otak</h4>
+                            </div>
+                            <div>
+                                <div class="menu-price">Rp 12.000</div><button class="btn-add-item"
+                                    onclick="tambahKeKeranjang('Otak-otak', 12000)">+ Tambah</button>
+                            </div>
+                        </div>
+                        <div class="menu-card" data-kategori="makanan">
+                            <div>
+                                <div class="menu-tag">Aneka Cemilan</div>
+                                <h4 class="menu-title">Sosis Goreng</h4>
+                            </div>
+                            <div>
+                                <div class="menu-price">Rp 12.000</div><button class="btn-add-item"
+                                    onclick="tambahKeKeranjang('Sosis Goreng', 12000)">+ Tambah</button>
+                            </div>
+                        </div>
+                        <div class="menu-card" data-kategori="makanan">
+                            <div>
+                                <div class="menu-tag">Aneka Cemilan</div>
+                                <h4 class="menu-title">Kentang Goreng</h4>
+                            </div>
+                            <div>
+                                <div class="menu-price">Rp 12.000</div><button class="btn-add-item"
+                                    onclick="tambahKeKeranjang('Kentang Goreng', 12000)">+ Tambah</button>
+                            </div>
+                        </div>
+
+                        <!-- PISANG BAKAR -->
+                        <div class="menu-card" data-kategori="makanan">
+                            <div>
+                                <div class="menu-tag">Pisang Bakar</div>
+                                <h4 class="menu-title">Pisang Bakar Coklat</h4>
+                            </div>
+                            <div>
+                                <div class="menu-price">Rp 10.000</div><button class="btn-add-item"
+                                    onclick="tambahKeKeranjang('Pisang Bakar Coklat', 10000)">+ Tambah</button>
+                            </div>
+                        </div>
+                        <div class="menu-card" data-kategori="makanan">
+                            <div>
+                                <div class="menu-tag">Pisang Bakar</div>
+                                <h4 class="menu-title">Pisang Bakar Keju</h4>
+                            </div>
+                            <div>
+                                <div class="menu-price">Rp 10.000</div><button class="btn-add-item"
+                                    onclick="tambahKeKeranjang('Pisang Bakar Keju', 10000)">+ Tambah</button>
+                            </div>
+                        </div>
+                        <div class="menu-card" data-kategori="makanan">
+                            <div>
+                                <div class="menu-tag">Pisang Bakar</div>
+                                <h4 class="menu-title">Pisang Bakar Coklat Keju</h4>
+                            </div>
+                            <div>
+                                <div class="menu-price">Rp 12.000</div><button class="btn-add-item"
+                                    onclick="tambahKeKeranjang('Pisang Bakar Coklat Keju', 12000)">+ Tambah</button>
+                            </div>
+                        </div>
+
+                        <!-- ROTI BAKAR -->
+                        <div class="menu-card" data-kategori="makanan">
+                            <div>
+                                <div class="menu-tag">Roti Bakar</div>
+                                <h4 class="menu-title">Roti Bakar Coklat</h4>
+                            </div>
+                            <div>
+                                <div class="menu-price">Rp 10.000</div><button class="btn-add-item"
+                                    onclick="tambahKeKeranjang('Roti Bakar Coklat', 10000)">+ Tambah</button>
+                            </div>
+                        </div>
+                        <div class="menu-card" data-kategori="makanan">
+                            <div>
+                                <div class="menu-tag">Roti Bakar</div>
+                                <h4 class="menu-title">Roti Bakar Keju</h4>
+                            </div>
+                            <div>
+                                <div class="menu-price">Rp 10.000</div><button class="btn-add-item"
+                                    onclick="tambahKeKeranjang('Roti Bakar Keju', 10000)">+ Tambah</button>
+                            </div>
+                        </div>
+                        <div class="menu-card" data-kategori="makanan">
+                            <div>
+                                <div class="menu-tag">Roti Bakar</div>
+                                <h4 class="menu-title">Roti Bakar Coklat Keju</h4>
+                            </div>
+                            <div>
+                                <div class="menu-price">Rp 12.000</div><button class="btn-add-item"
+                                    onclick="tambahKeKeranjang('Roti Bakar Coklat Keju', 12000)">+ Tambah</button>
+                            </div>
+                        </div>
+
+                        <!-- MINUMAN LAIN -->
+                        <div class="menu-card" data-kategori="minuman">
+                            <div>
+                                <div class="menu-tag">Minuman</div>
+                                <h4 class="menu-title">Teh Manis</h4>
+                            </div>
+                            <div>
+                                <div class="menu-price">Rp 3.000</div><button class="btn-add-item"
+                                    onclick="tambahKeKeranjang('Teh Manis', 3000)">+ Tambah</button>
+                            </div>
+                        </div>
+
+                        <!-- KOPI -->
+                        <div class="menu-card" data-kategori="kopi">
+                            <div>
+                                <div class="menu-tag">Kopi</div>
+                                <h4 class="menu-title">Kopi Hitam</h4>
+                            </div>
+                            <div>
+                                <div class="menu-price">Rp 4.000</div><button class="btn-add-item"
+                                    onclick="tambahKeKeranjang('Kopi Hitam', 4000)">+ Tambah</button>
+                            </div>
+                        </div>
+                        <div class="menu-card" data-kategori="kopi">
+                            <div>
+                                <div class="menu-tag">Kopi</div>
+                                <h4 class="menu-title">ABC Susu</h4>
+                            </div>
+                            <div>
+                                <div class="menu-price">Rp 5.000</div><button class="btn-add-item"
+                                    onclick="tambahKeKeranjang('ABC Susu', 5000)">+ Tambah</button>
+                            </div>
+                        </div>
+                        <div class="menu-card" data-kategori="kopi">
+                            <div>
+                                <div class="menu-tag">Kopi</div>
+                                <h4 class="menu-title">Torabika Cappucino</h4>
+                            </div>
+                            <div>
+                                <div class="menu-price">Rp 5.000</div><button class="btn-add-item"
+                                    onclick="tambahKeKeranjang('Torabika Cappucino', 5000)">+ Tambah</button>
+                            </div>
+                        </div>
+
+                        <!-- SUSU & MINUMAN SACHET -->
+                        <div class="menu-card" data-kategori="kopi">
+                            <div>
+                                <div class="menu-tag">Susu</div>
+                                <h4 class="menu-title">Susu Putih</h4>
+                            </div>
+                            <div>
+                                <div class="menu-price">Rp 5.000</div><button class="btn-add-item"
+                                    onclick="tambahKeKeranjang('Susu Putih', 5000)">+ Tambah</button>
+                            </div>
+                        </div>
+                        <div class="menu-card" data-kategori="kopi">
+                            <div>
+                                <div class="menu-tag">Susu</div>
+                                <h4 class="menu-title">Susu Coklat</h4>
+                            </div>
+                            <div>
+                                <div class="menu-price">Rp 5.000</div><button class="btn-add-item"
+                                    onclick="tambahKeKeranjang('Susu Coklat', 5000)">+ Tambah</button>
+                            </div>
+                        </div>
+
+                        <!-- TOPING -->
+                        <div class="menu-card" data-kategori="toping">
+                            <div>
+                                <div class="menu-tag">Toping</div>
+                                <h4 class="menu-title">Keju</h4>
+                            </div>
+                            <div>
+                                <div class="menu-price">Rp 3.000</div><button class="btn-add-item"
+                                    onclick="tambahKeKeranjang('Keju', 3000)">+ Tambah</button>
+                            </div>
+                        </div>
+                        <div class="menu-card" data-kategori="toping">
+                            <div>
+                                <div class="menu-tag">Toping</div>
+                                <h4 class="menu-title">Telur</h4>
+                            </div>
+                            <div>
+                                <div class="menu-price">Rp 5.000</div><button class="btn-add-item"
+                                    onclick="tambahKeKeranjang('Telur', 5000)">+ Tambah</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checkout-container">
+                    <div class="cart-box">
+                        <div class="form-customer">
+                            <label>NAMA PEMBELI / NO MEJA / BILL PS</label>
+                            <input type="text" id="customer-name" value="Mas Adi / PS 2">
+                        </div>
+                        <h3>🛒 Keranjang</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Item / Durasi</th>
+                                    <th>Qty / Jam</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cart-items">
+                                <tr>
+                                    <td colspan="3" style="text-align: center; color: var(--text-muted);">Keranjang
+                                        kosong.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h3 style="display: flex; justify-content: space-between; margin-top: 15px;">
+                            <span>Total:</span><span style="color: var(--primary-hover);" id="cart-total-display">Rp
+                                0</span>
+                        </h3>
+                        <button class="btn-action" onclick="prosesTransaksi()">Proses & Selesai Transaksi</button>
+                    </div>
+
+                    <!-- STRUK KASIR UNIQUELY CUSTOMIZED -->
+                    <div class="struk-box" id="struk-nota-fisik">
+                        <div class="struk-header">
+                            <h3>~ WARKOP MAJOE ~</h3>
+                            <p>☕ Tempat Nongkrong & Mabar Ter-Asyik 🎮</p>
+                            <p>Perum. Mutiara Bekasi Jaya | WA: @warkopmajoe</p>
+                        </div>
+
+                        <div class="struk-divider">(づ￣ ³￣)づ 🐾</div>
+
+                        <div style="font-size: 11px; line-height: 1.3;">
+                            <div class="struk-row"><span>No Nota: <span id="struk-inv">INV-0000</span></span></div>
+                            <div class="struk-row"><span>Waktu : 2026-06-29</span></div>
+                            <div class="struk-row"><span>Sobat : <b id="struk-customer-label">-</b></span></div>
+                        </div>
+
+                        <div class="struk-divider">-------------------------</div>
+
+                        <!-- List Item Pesanan -->
+                        <div style="line-height: 1.5;" id="struk-items-list"></div>
+
+                        <!-- Row Total Harga -->
+                        <div class="struk-row bold">
+                            <span>TOTAL KESELURUHAN</span>
+                            <span id="struk-total-display">Rp 0</span>
+                        </div>
+
+                        <div class="struk-divider">-------------------------</div>
+
+                        <div class="struk-footer">
+                            <p>Perut kenyang, mabar pun tenang! 😎</p>
+                            <p>Maturnuwun / Terima Kasih ya, Kak! Ditunggu kedatangan berikutnya ✨</p>
+                            <div class="badge-wifi">📶 Wi-Fi: Warkop | Pass: Warkopmajoe</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- HALAMAN INVENTORI -->
+    <div id="page-inventori" class="page-content">
+        <div class="section">
+            <h2>📦 Manajemen Inventori (Log Stok)</h2>
+            <div class="pos-container">
+                <div style="flex: 1; min-width: 300px;">
+                    <form id="form-inventori">
+                        <div class="form-group">
+                            <label>Tanggal Transaksi Barang:</label>
+                            <input type="date" id="inv-tanggal" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Jenis Log Arus Barang:</label>
+                            <select id="inv-status">
+                                <option value="Masuk">Barang Masuk (Kulakan Baru)</option>
+                                <option value="Keluar">Barang Keluar (Dipakai/Rusak)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Nama Barang / Bahan Baku:</label>
+                            <input type="text" id="inv-nama" placeholder="Contoh: Kopi Sachet" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Jumlah Kuantitas:</label>
+                            <input type="text" id="inv-qty" placeholder="Contoh: 5 Kardus" required>
+                        </div>
+                        <button type="button" class="btn-action" style="background-color: var(--accent-brown);"
+                            onclick="simpanLogStok()">Simpan Log Stok</button>
+                    </form>
+                </div>
+                <div style="flex: 1.5; min-width: 300px;">
+                    <h3>Riwayat Mutasi Barang</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Nama Barang</th>
+                                <th>Status</th>
+                                <th>Qty</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-table-body">
+                            <tr>
+                                <td>2026-06-29</td>
+                                <td>Indomie Goreng (Kardus)</td>
+                                <td style="color: green; font-weight: bold;">Masuk</td>
+                                <td>5 Kardus</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HALAMAN PEMBELIAN -->
+    <div id="page-pembelian" class="page-content">
+        <div class="section">
+            <h2>🧾 Proses Pembelian / Pengeluaran Modal</h2>
+            <form style="max-width: 500px;" id="form-pembelian">
+                <div class="form-group">
+                    <label>Tanggal Pembelian Modal:</label>
+                    <input type="date" id="beli-tanggal" required>
+                </div>
+                <div class="form-group">
+                    <label>Bahan Baku yang Dibeli:</label>
+                    <input type="text" id="beli-nama" placeholder="Misal: Es Batu" required>
+                </div>
+                <div class="form-group">
+                    <label>Total Pengeluaran Uang (Rp):</label>
+                    <input type="number" id="beli-harga" placeholder="Contoh: 25000" required>
+                </div>
+                <button type="button" class="btn-action" style="background-color: var(--accent-brown);"
+                    onclick="catatPembelianModal()">Catat Belanja Modal</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const hariIni = new Date().toISOString().split('T')[0];
+        document.getElementById('inv-tanggal').value = hariIni;
+        document.getElementById('beli-tanggal').value = hariIni;
+
+        function bukaHalaman(idHalaman, tombolAktif) {
+            document.querySelectorAll('.page-content').forEach(h => h.classList.remove('active-page'));
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+            document.getElementById(idHalaman).classList.add('active-page');
+            tombolAktif.classList.add('active');
+        }
+
+        let keranjang = [];
+        let totalBelanja = 0;
+
+        document.getElementById('search-input').addEventListener('input', function () {
+            const keyword = this.value.toLowerCase();
+            document.querySelectorAll('.menu-card').forEach(card => {
+                const title = card.querySelector('.menu-title').textContent.toLowerCase();
+                if (title.includes(keyword)) card.classList.remove('hidden');
+                else card.classList.add('hidden');
+            });
+        });
+
+        function filterKategori(kategori, element) {
+            document.querySelectorAll('.btn-filter').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            document.querySelectorAll('.menu-card').forEach(card => {
+                if (kategori === 'semua' || card.getAttribute('data-kategori') === kategori) card.classList.remove('hidden');
+                else card.classList.add('hidden');
+            });
+        }
+
+        function tambahKeKeranjang(nama, harga) {
+            const itemExist = keranjang.find(item => item.nama === nama);
+            if (itemExist) {
+                itemExist.qty += 1;
+                itemExist.total = itemExist.qty * harga;
+            } else {
+                keranjang.push({ nama: nama, harga: harga, qty: 1, total: harga });
+            }
+            renderKeranjang();
+        }
+
+        function kurangiDariKeranjang(nama) {
+            const itemExist = keranjang.find(item => item.nama === nama);
+            if (itemExist) {
+                itemExist.qty -= 1;
+                if (itemExist.qty <= 0) {
+                    keranjang = keranjang.filter(item => item.nama !== nama);
+                } else {
+                    itemExist.total = itemExist.qty * itemExist.harga;
+                }
+            }
+            renderKeranjang();
+        }
+
+        function renderKeranjang() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            if (keranjang.length === 0) {
+                cartItemsContainer.innerHTML = `<tr><td colspan="3" style="text-align: center; color: var(--text-muted);">Keranjang kosong.</td></tr>`;
+                document.getElementById('cart-total-display').textContent = 'Rp 0';
+                return;
+            }
+
+            let htmlCart = '';
+            totalBelanja = 0;
+
+            keranjang.forEach((item) => {
+                totalBelanja += item.total;
+                htmlCart += `
+                    <tr>
+                        <td>${item.nama}</td>
+                        <td>
+                            <div class="qty-controls">
+                                <button class="btn-qty" onclick="kurangiDariKeranjang('${item.nama}')">-</button>
+                                <span>${item.qty}</span>
+                                <button class="btn-qty" onclick="tambahKeKeranjang('${item.nama}', ${item.harga})">+</button>
+                            </div>
+                        </td>
+                        <td>Rp ${item.total.toLocaleString('id-ID')}</td>
+                    </tr>
+                `;
+            });
+            cartItemsContainer.innerHTML = htmlCart;
+            document.getElementById('cart-total-display').textContent = 'Rp ' + totalBelanja.toLocaleString('id-ID');
+        }
+
+        function prosesTransaksi() {
+            if (keranjang.length === 0) {
+                alert('Keranjang masih kosong!');
+                return;
+            }
+
+            const namaPelanggan = document.getElementById('customer-name').value;
+            document.getElementById('struk-customer-label').textContent = (namaPelanggan ? namaPelanggan : '-');
+
+            const randomInv = 'INV-' + Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('struk-inv').textContent = randomInv;
+
+            const strukItemsContainer = document.getElementById('struk-items-list');
+            let htmlStruk = '';
+            keranjang.forEach(item => {
+                htmlStruk += `
+                    <div class="struk-row">
+                        <span>${item.nama} x${item.qty}</span>
+                        <span>Rp ${item.total.toLocaleString('id-ID')}</span>
+                    </div>
+                `;
+            });
+            strukItemsContainer.innerHTML = htmlStruk;
+            document.getElementById('struk-total-display').textContent = 'Rp ' + totalBelanja.toLocaleString('id-ID');
+
+            const strukBox = document.getElementById('struk-nota-fisik');
+            strukBox.style.display = 'block';
+
+            setTimeout(() => {
+                window.print();
+
+                keranjang = [];
+                renderKeranjang();
+                strukBox.style.display = 'none';
+            }, 300);
+        }
+
+        function simpanLogStok() {
+            const tanggal = document.getElementById('inv-tanggal').value;
+            const status = document.getElementById('inv-status').value;
+            const nama = document.getElementById('inv-nama').value;
+            const qty = document.getElementById('inv-qty').value;
+            if (!tanggal || !nama || !qty) { alert('Mohon isi semua data!'); return; }
+            const tableBody = document.getElementById('inventory-table-body');
+            const newRow = document.createElement('tr');
+            const warnaStatus = (status === "Masuk") ? "green" : "red";
+            newRow.innerHTML = `<td>${tanggal}</td><td>${nama}</td><td style="color: ${warnaStatus}; font-weight: bold;">${status}</td><td>${qty}</td>`;
+            tableBody.insertBefore(newRow, tableBody.firstChild);
+            alert('Sukses mencatat mutasi stok!');
+            document.getElementById('inv-nama').value = '';
+            document.getElementById('inv-qty').value = '';
+        }
+
+        function catatPembelianModal() {
+            const tanggal = document.getElementById('beli-tanggal').value;
+            const namaBahan = document.getElementById('beli-nama').value;
+            const harga = document.getElementById('beli-harga').value;
+            if (!tanggal || !namaBahan || !harga) { alert('Mohon isi semua data!'); return; }
+            alert(`Pengeluaran Modal Sukses Dicatat!`);
+            document.getElementById('beli-nama').value = '';
+            document.getElementById('beli-harga').value = '';
+        }
+    </script>
+</body>
+
+</html>
